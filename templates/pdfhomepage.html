@@ -1,0 +1,15 @@
+{% extends "index.html" %} {% block content %}
+<div>
+  <h1>Welcome to the PDF Homepage</h1>
+
+  {% if user.is_authenticated %}
+  <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+  </form>
+  {% else %}
+  <p>Don't have an account? <a href="{% url 'register' %}">Sign Up</a></p>
+  <p>Already have an account? <a href="{% url 'login' %}">Sign In</a></p>
+  {% endif %}
+</div>
+{% endblock content %}
