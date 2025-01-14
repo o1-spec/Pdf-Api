@@ -1,63 +1,76 @@
 {% extends "index.html" %} {% block content %}
+<div class="auth-page">
+  <div class="form-container">
+    <div class="header">
+      <h1>Register</h1>
+    </div>
 
-<div class="header">
-  <h1>Register</h1>
-</div>
+    <div class="auth-form">
+      <form method="post">
+        {% csrf_token %}
 
-<div class="auth-form">
-  <form method="post">
-    {% csrf_token %}
+        <div class="auth-field">
+          <label for="{{ form.username.id_for_label }}">Username</label>
+          {{ form.username }} {% if form.username.errors %}
+          <div class="errors">
+            {% for error in form.username.errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
 
-    <div>
-      <label for="{{ form.username.id_for_label }}">Username</label>
-      {{ form.username }} {% if form.username.errors %}
+        <div class="auth-field">
+          <label for="{{ form.email.id_for_label }}">Email Address</label>
+          {{ form.email }} {% if form.email.errors %}
+          <div class="errors">
+            {% for error in form.email.errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="auth-field">
+          <label for="{{ form.password.id_for_label }}">Password</label>
+          {{ form.password }} {% if form.password.errors %}
+          <div class="errors">
+            {% for error in form.password.errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="auth-field">
+          <label for="{{ form.confirmPassword.id_for_label }}"
+            >Confirm Password</label
+          >
+          {{ form.confirmPassword }} {% if form.confirmPassword.errors %}
+          <div class="errors">
+            {% for error in form.confirmPassword.errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <input type="submit" value="Register" />
+      </form>
+
+      {% if messages %}
       <div class="errors">
-        {% for error in form.username.errors %}
-        <p>{{ error }}</p>
+        {% for message in messages %}
+        <p>{{ message }}</p>
         {% endfor %}
       </div>
       {% endif %}
+
+      <p class="already">
+        Already have an account? <a href="{% url 'login' %}">Login</a>
+      </p>
     </div>
-
-    <div>
-      <label for="{{ form.email.id_for_label }}">Email Address</label>
-      {{ form.email }} {% if form.email.errors %}
-      <div class="errors">
-        {% for error in form.email.errors %}
-        <p>{{ error }}</p>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </div>
-
-    <div>
-      <label for="{{ form.password.id_for_label }}">Password</label>
-      {{ form.password }} {% if form.password.errors %}
-      <div class="errors">
-        {% for error in form.password.errors %}
-        <p>{{ error }}</p>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </div>
-
-    <div>
-      <label for="{{ form.confirmPassword.id_for_label }}"
-        >Confirm Password</label
-      >
-      {{ form.confirmPassword }} {% if form.confirmPassword.errors %}
-      <div class="errors">
-        {% for error in form.confirmPassword.errors %}
-        <p>{{ error }}</p>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </div>
-
-    <input type="submit" value="Register" />
-  </form>
-
-  <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+  </div>
 </div>
 
 {% endblock content %}

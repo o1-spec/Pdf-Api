@@ -1,36 +1,50 @@
 {% extends 'index.html'%} {%block content%}
 
-<div class="header">
-  <h1>Login</h1>
-</div>
+<div class="auth-page">
+  <div class="form-container">
+    <div class="header">
+      <h1>Login</h1>
+    </div>
 
-<div class="auth-form">
-  <form method="post">
-    {%csrf_token%}
-    <div>
-      <label for="{{ form.username.id_for_label }}">Username</label>
-      {{ form.username }} {% if form.username.errors %}
+    <div class="auth-form">
+      <form method="post">
+        {%csrf_token%}
+        <div class="auth-field">
+          <label for="{{ form.username.id_for_label }}">Username</label>
+          {{ form.username }} {% if form.username.errors %}
+          <div class="errors">
+            {% for error in form.username.errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        <div class="auth-field">
+          <label for="{{ form.password.id_for_label }}">Password</label>
+          {{ form.password }} {% if form.password.errors %}
+          <div class="errors">
+            {% for error in form.password.errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        <input type="submit" value="Login" />
+      </form>
+
+      {% if messages %}
       <div class="errors">
-        {% for error in form.username.errors %}
-        <p>{{ error }}</p>
+        {% for message in messages %}
+        <p>{{ message }}</p>
         {% endfor %}
       </div>
       {% endif %}
-    </div>
-    <div>
-      <label for="{{ form.password.id_for_label }}">Password</label>
-      {{ form.password }} {% if form.password.errors %}
-      <div class="errors">
-        {% for error in form.password.errors %}
-        <p>{{ error }}</p>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </div>
-    <input type="submit" value="Login" />
-  </form>
-</div>
 
-<p>Already have an account? <a href="{% url 'register' %}">Sign Up</a></p>
+      <p class="already">
+        Already have an account? <a href="{% url 'register' %}">Sign Up</a>
+      </p>
+    </div>
+  </div>
+</div>
 
 {% endblock content %}
