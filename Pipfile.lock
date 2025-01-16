@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "954ceb194304d0bfca217c65c8ce0f56a7dd32badb65fa546f931f7730c92a35"
+            "sha256": "c41470e99470173611d15cc5a7a4022d74da333622d8d376df0d088b22c60be4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -246,12 +246,12 @@
         },
         "django": {
             "hashes": [
-                "sha256:236e023f021f5ce7dee5779de7b286565fdea5f4ab86bae5338e3f7b69896cf0",
-                "sha256:de450c09e91879fa5a307f696e57c851955c910a438a35e6b4c895e86bedc82a"
+                "sha256:19bbca786df50b9eca23cee79d495facf55c8f5c54c529d9bf1fe7b5ea086af3",
+                "sha256:c46eb936111fffe6ec4bc9930035524a8be98ec2f74d8a0ff351226a3e52f459"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.10'",
-            "version": "==5.1.4"
+            "version": "==5.1.5"
         },
         "django-filter": {
             "hashes": [
@@ -261,6 +261,15 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==24.3"
+        },
+        "django-otp": {
+            "hashes": [
+                "sha256:0d9497ea4fb13fc04d50b49aa53dd1c740fe4bc5dde0ca27fb394f84e5da7bac",
+                "sha256:783dea669ac0eaf5cd336f73839443584ee665af427a84175cca5a9d620366db"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.7'",
+            "version": "==1.5.4"
         },
         "djangorestframework": {
             "hashes": [
@@ -320,6 +329,15 @@
             ],
             "markers": "python_version >= '3.9'",
             "version": "==2.10.1"
+        },
+        "pyotp": {
+            "hashes": [
+                "sha256:346b6642e0dbdde3b4ff5a930b664ca82abfa116356ed48cc42c7d6590d36f63",
+                "sha256:81c2e5865b8ac55e825b0358e496e1d9387c811e85bb40e71a3b29b288963612"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.7'",
+            "version": "==2.9.0"
         },
         "python3-openid": {
             "hashes": [

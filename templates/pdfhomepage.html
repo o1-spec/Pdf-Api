@@ -11,8 +11,12 @@
         <button type="submit">Logout</button>
       </form>
       {% else %}
-      <p>Don't have an account? <a href="{% url 'register' %}">Sign Up</a></p>
-      <p>Already have an account? <a href="{% url 'login' %}">Sign In</a></p>
+      <div class="sign-up">
+        <a href="{% url 'register' %}">Sign Up</a>
+      </div>
+      <div class="sign-up">
+        <a href="{% url 'login' %}">Sign In</a>
+      </div>
       {% endif %}
     </div>
   </div>

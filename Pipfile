@@ -9,6 +9,8 @@ djangorestframework = "*"
 django-filter = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
+django-otp = "*"
+pyotp = "*"
 
 [dev-packages]
 

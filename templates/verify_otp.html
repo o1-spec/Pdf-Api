@@ -1,0 +1,28 @@
+{% extends "index.html" %} {% block content %}
+<div class="auth-page">
+  <div class="form-container">
+    <div class="header">
+      <h1>Verify OTP</h1>
+    </div>
+
+    <div class="auth-form">
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="auth-field">
+          <label for="email_otp">Email OTP</label>
+          <input type="text" name="email_otp" id="email_otp" required />
+        </div>
+
+        <input type="submit" value="Verify OTP" />
+
+        {% if error %}
+        <div class="errors">
+          <p style="color: red">{{ error }}</p>
+        </div>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

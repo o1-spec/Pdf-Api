@@ -25,3 +25,9 @@ class UserRegistrationForm(forms.Form):
         if commit:
             user.save()
         return user
+    
+class EmailOTPVerificationForm(forms.Form):
+    email_otp = forms.CharField(
+        max_length=6,
+        widget=forms.TextInput(attrs={'placeholder': 'Enter Email OTP'})
+    )
