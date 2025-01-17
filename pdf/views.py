@@ -93,6 +93,7 @@ class VerifyEmailOTPView(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.kwargs.get('user_id')
+        context['message'] = "Please check your email for the OTP."
         return context
         
     
@@ -114,3 +115,7 @@ class LoginView(LoginView):
 
 class LogoutView(LogoutView):
     next_page= reverse_lazy("login") 
+    def dispatch(self, request, *args, **kwargs):
+        if "_messages" in request.session:
+            del request.session["_messages"]
+        return super().dispatch(request, *args, **kwargs)

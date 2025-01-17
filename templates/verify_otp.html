@@ -20,6 +20,10 @@
         <div class="errors">
           <p style="color: red">{{ error }}</p>
         </div>
+        {% endif %} {% if message %}
+        <div class="message">
+          <p style="color: green">{{ message }}</p>
+        </div>
         {% endif %}
       </form>
     </div>
