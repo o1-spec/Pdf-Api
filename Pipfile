@@ -8,9 +8,14 @@ django = "*"
 djangorestframework = "*"
 django-filter = "*"
 djoser = "*"
-djangorestframework-simplejwt = "*"
 django-otp = "*"
 pyotp = "*"
+djangorestframework-simplejwt = "*"
+pypdf2 = "*"
+pillow = "*"
+pdf2image = "*"
+reportlab = "*"
+poppler-utils = "*"
 
 [dev-packages]
 

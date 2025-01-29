@@ -8,20 +8,25 @@ html {
   box-sizing: border-box;
 }
 
+body {
+  font-family: "Montserrat", serif;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background: #0056a3;
+  padding: 2rem 2rem;
   color: #ffffff;
   border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
 }
 
 .site-name h2 {
   font-size: 2.4rem;
   font-weight: 700;
+  color: #333;
 }
 
 .nav-container {
@@ -33,6 +38,7 @@ html {
 
 .nav-links {
   display: flex;
+  align-items: center;
   gap: 1.5rem;
 }
 
@@ -44,6 +50,29 @@ html {
 
 .nav-link:hover {
   text-decoration: underline;
+}
+
+.sign-up a,
+.sign-up button {
+  background: linear-gradient(135deg, #0077cc, #005fa3);
+  color: #fff;
+  padding: 1.2rem;
+  border: none;
+  font-size: 1.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-decoration: none;
+}
+
+.sign-in {
+  padding: 1.2rem;
+  border: none;
+  font-size: 1.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-decoration: none;
 }
 
 form button {
@@ -65,6 +94,20 @@ form button:hover {
   margin-top: 2rem;
 }
 
+/***************HOMEPAGE **************/
+.homepage_content {
+  font-family: "Montserrat", serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.homepage_content h1 {
+  font-size: 4rem;
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
 /* General Styles */
 .auth-page {
   font-family: "Montserrat", serif;
@@ -81,7 +124,7 @@ form button:hover {
 }
 
 .auth-page::before {
-  content: "PDF CONVERTER";
+  content: "FLEXI CONVERT";
   position: absolute;
   top: 50%;
   left: 50%;

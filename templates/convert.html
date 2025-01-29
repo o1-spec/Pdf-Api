@@ -1,0 +1,180 @@
+{% extends "homepage.html" %} {% block content %}
+<style>
+  /********* CONVERT PAGE **********/
+  .convert-page {
+    font-family: "Montserrat", serif;
+    /* background: #f3f4f7; */
+    padding: 3rem 2rem;
+    border-radius: 8px;
+    height: fit-content;
+  }
+
+  /* .convert-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .convert-header h2 {
+    font-size: 2.4rem;
+    color: #0056a3;
+    font-weight: 700;
+  } */
+
+  .convert-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .convert-form {
+    background: #ffffff;
+    padding: 2rem;
+    /* margin-top: 6rem; */
+    width: 50rem;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .convert-form label {
+    display: block;
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    color: #333;
+  }
+
+  .convert-form input[type="file"] {
+    display: block;
+    width: 100%;
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .convert-form select {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .convert-btn {
+    background: linear-gradient(135deg, #0077cc, #005fa3);
+    color: #fff;
+    padding: 1.2rem;
+    border: none;
+    font-size: 1.6rem;
+    width: 100%;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .convert-btn:hover {
+    background: linear-gradient(135deg, #005fa3, #004d82);
+  }
+
+  .messages {
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+
+  .messages p {
+    font-size: 1.4rem;
+  }
+
+  .messages .success {
+    color: #28a745;
+  }
+
+  .messages .error {
+    color: #dc3545;
+  }
+
+  /* Media Query for Responsive Design */
+  @media (max-width: 768px) {
+    .convert-page {
+      padding: 2rem;
+    }
+
+    .convert-form {
+      padding: 1.5rem;
+    }
+
+    .convert-header h2 {
+      font-size: 2rem;
+    }
+
+    .convert-form label,
+    .convert-form input,
+    .convert-form select,
+    .convert-btn {
+      font-size: 1.4rem;
+    }
+  }
+</style>
+<div class="convert-page">
+  <!-- <div class="convert-header">
+    <h2>Convert Your PDF</h2>
+  </div> -->
+
+  <div class="convert-container">
+    <form class="convert-form" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <label for="file">Upload File:</label>
+      <input type="file" name="file" id="file" multiple required />
+
+      <label for="conversion_type">Conversion Type:</label>
+      <select name="conversion_type" id="conversion_type">
+        <option value="image_to_pdf">Image to PDF</option>
+        <option value="pdf_to_image">PDF to Image</option>
+      </select>
+
+      <button class="convert-btn" type="submit">Convert</button>
+    </form>
+  </div>
+
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+    <p class="{{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}{% endblock %}
+
+  <script>
+    const form = document.getElementById("conversion-form");
+    const progressContainer = document.getElementById("progress-container");
+    const progressBar = document.getElementById("progress-bar");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      progressContainer.style.display = "block";
+
+      const formData = new FormData(form);
+      const xhr = new XMLHttpRequest();
+
+      xhr.open("POST", form.action, true);
+      xhr.upload.onprogress = function (event) {
+        if (event.lengthComputable) {
+          const percentage = (event.loaded / event.total) * 100;
+          progressBar.value = percentage;
+        }
+      };
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          window.location.href = xhr.responseURL;
+        } else {
+          alert("An error occurred during the conversion. Please try again.");
+        }
+      };
+
+      xhr.send(formData);
+    });
+  </script>
+</div>

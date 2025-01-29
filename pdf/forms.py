@@ -31,3 +31,4 @@ class EmailOTPVerificationForm(forms.Form):
         max_length=6,
         widget=forms.TextInput(attrs={'placeholder': 'Enter Email OTP'})
     )
+    

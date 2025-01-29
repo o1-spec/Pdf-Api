@@ -1,0 +1,128 @@
+{% extends "index.html" %} {% block content %}
+<style>
+  .download-container {
+    margin-top: 8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+    font-family: "Montserrat", serif;
+  }
+
+  .download-container h1 {
+    color: #005fa3;
+    font-size: 4rem;
+  }
+
+  .download-btn {
+    background: linear-gradient(135deg, #0077cc, #005fa3);
+    color: #fff;
+    padding: 1.2rem;
+    border: none;
+    font-size: 1.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+  }
+
+  .thank-you-message {
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+    padding: 4rem 3rem;
+    font-size: 1.2rem;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .thank-you-message p {
+    font-size: 1.9rem;
+    font-weight: bold;
+    padding-bottom: 1rem;
+  }
+
+  .download-sign {
+    background: linear-gradient(135deg, #0077cc, #005fa3);
+    color: #fff;
+    padding: 1.2rem;
+    border: none;
+    font-size: 1.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+  }
+
+  .download-homepage {
+    text-decoration: underline;
+    color: #005fa3;
+    padding-top: 1rem;
+    font-size: 1.4rem;
+  }
+
+  .download-log {
+    padding: 1.2rem;
+    border: none;
+    font-size: 1.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+  }
+</style>
+<div class="download-container">
+  <h1>Download Your File</h1>
+  <a
+    class="download-btn"
+    href="{% url 'download' %}?file_path={{ file_url }}"
+    download
+  >
+    Download File
+  </a>
+  <div class="thank-you-message">
+    <p>Thank you for using our service!</p>
+    {% if user.is_authenticated %}
+    <a class="" href="{% url 'base-homepage' %}">Go to Homepage</a>
+    {% else %}
+    <div class="download-auth">
+      <a class="download-sign" href="{% url 'register' %}">Sign Up</a> |
+      <a class="download-log" href="{% url 'login' %}">Log In</a>
+    </div>
+    <a class="download-homepage" href="{% url 'base-homepage' %}"
+      >Go to Homepage</a
+    >
+    {% endif %}
+  </div>
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+    <p class="{{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+<!-- <script>
+  const downloadLink = document.querySelector("a[download]");
+  downloadLink.addEventListener("click", () => {
+    setTimeout(() => {
+      const message = document.createElement("div");
+      message.innerHTML = `
+                <p>Thank you for using our service!</p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'base-pdf' %}">Go to Homepage</a>
+                {% else %}
+                    <a href="{% url 'register' %}">Sign Up</a> |
+                    <a href="{% url 'login' %}">Log In</a> |
+                    <a href="{% url 'base-pdf' %}">Go to Homepage</a>
+                {% endif %}
+            `;
+      document.body.appendChild(message);
+    }, 1000); // Delay to simulate a post-download action
+  });
+</script> -->

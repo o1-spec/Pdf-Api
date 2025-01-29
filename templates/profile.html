@@ -1,0 +1,12 @@
+{% comment %}
+<h2>Your Converted Files</h2>
+<ul>
+  {% for file in conversions %}
+  <li>
+    <p>Type: {{ file.conversion_type }}</p>
+    <p><a href="{{ file.converted_file.url }}">Download</a></p>
+    <p>Converted on: {{ file.created_at }}</p>
+  </li>
+  {% endfor %}
+</ul>
+{% endcomment %}
