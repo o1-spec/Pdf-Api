@@ -77,13 +77,7 @@
 </style>
 <div class="download-container">
   <h1>Download Your File</h1>
-  <a
-    class="download-btn"
-    href="{% url 'download' %}?file_path={{ file_url }}"
-    download
-  >
-    Download File
-  </a>
+  <a class="download-btn" href="{{ file_url }}" download> Download File </a>
   <div class="thank-you-message">
     <p>Thank you for using our service!</p>
     {% if user.is_authenticated %}
@@ -107,22 +101,3 @@
   {% endif %}
 </div>
 {% endblock %}
-<!-- <script>
-  const downloadLink = document.querySelector("a[download]");
-  downloadLink.addEventListener("click", () => {
-    setTimeout(() => {
-      const message = document.createElement("div");
-      message.innerHTML = `
-                <p>Thank you for using our service!</p>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'base-pdf' %}">Go to Homepage</a>
-                {% else %}
-                    <a href="{% url 'register' %}">Sign Up</a> |
-                    <a href="{% url 'login' %}">Log In</a> |
-                    <a href="{% url 'base-pdf' %}">Go to Homepage</a>
-                {% endif %}
-            `;
-      document.body.appendChild(message);
-    }, 1000); // Delay to simulate a post-download action
-  });
-</script> -->

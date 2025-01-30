@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.views import LoginView,LogoutView
 from .forms import UserRegistrationForm, EmailOTPVerificationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from .utils import convert_images_to_pdf,convert_pdf_to_images
 from django.contrib.auth. models import User
@@ -144,7 +144,7 @@ class ConvertPdfView(TemplateView):
         if conversion_type == "image_to_pdf":
             pdf_path = convert_images_to_pdf(saved_file_paths, os.path.join(output_folder, "output.pdf"))
             if pdf_path:
-                return redirect("download", file_path=os.path.basename(pdf_path))
+                return redirect("download_page", file_path=os.path.basename(pdf_path))
 
         elif conversion_type == "pdf_to_image":
             uploaded_pdf = uploaded_files[0]
@@ -156,7 +156,7 @@ class ConvertPdfView(TemplateView):
             output = convert_pdf_to_images(pdf_path, output_folder)
 
             if output:
-                return redirect("download", file_path=os.path.basename(output["file_path"]))
+                return redirect(reverse("download_page", kwargs={"file_path": os.path.basename(output["file_path"])}))
 
         messages.error(request, "Conversion failed. Please try again.")
         return redirect("base-homepage")
@@ -172,6 +172,16 @@ class DownloadView(View):
             raise Http404("File not found.")
 
         return FileResponse(open(file_path, "rb"), as_attachment=True)
+    
+class DownloadPageView(TemplateView):
+    template_name = "download.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        file_path = kwargs.get("file_path")
+        file_url = os.path.join(settings.MEDIA_URL, "conversions", file_path)
+        context["file_url"] = file_url
+        return context
 
     
 # class ConvertPdfView(View):
