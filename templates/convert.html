@@ -9,17 +9,6 @@
     height: fit-content;
   }
 
-  /* .convert-header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-
-  .convert-header h2 {
-    font-size: 2.4rem;
-    color: #0056a3;
-    font-weight: 700;
-  } */
-
   .convert-container {
     display: flex;
     align-items: center;
@@ -95,6 +84,17 @@
     color: #dc3545;
   }
 
+  .loader-box {
+    position: fixed;
+    background-color: #fff;
+    border-radius: 1rem;
+    padding-top: 2rem;
+    width: 20rem;
+    top: 40%;
+    height: 10rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
   .loader {
     width: 40px;
     height: 40px;
@@ -139,6 +139,75 @@
       font-size: 1.4rem;
     }
   }
+
+  .thank-you-message {
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 28%;
+    right: 34%;
+    padding: 4rem 3rem;
+    font-size: 1.2rem;
+    color: #333;
+    width: 40rem;
+    height: 30rem;
+  }
+
+  .close-popup {
+    float: right;
+    transform: translateY(-2rem);
+    background-color: #fff;
+    font-weight: 700;
+    width: 1rem;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+  }
+
+  .thank-you-message p {
+    font-size: 1.9rem;
+    font-weight: bold;
+    padding-bottom: 1rem;
+    text-align: center;
+  }
+
+  .download-sign {
+    background: linear-gradient(135deg, #0077cc, #005fa3);
+    color: #fff;
+    padding: 1.2rem;
+    border: none;
+    font-size: 1.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+  }
+
+  .download-homepage {
+    text-decoration: underline;
+    color: #005fa3;
+    padding-top: 1rem;
+    font-size: 1.4rem;
+  }
+
+  .download-log {
+    padding: 1.2rem;
+    border: none;
+    font-size: 1.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+  }
+
+  .thank-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    height: 100%;
+  }
 </style>
 <div class="convert-page">
   <div class="convert-container">
@@ -163,8 +232,10 @@
       </button>
 
       <!-- Loader -->
-      <div id="loader" class="loader hidden"></div>
     </form>
+    <div class="loader-box">
+      <div id="loader" class="loader"></div>
+    </div>
   </div>
 
   {% if messages %}
@@ -174,6 +245,24 @@
     {% endfor %}
   </div>
   {% endif %}
+
+  <div class="thank-you-message">
+    <button class="close-popup" onclick="hidePopup()">&#10060;</button>
+    <div class="thank-box">
+      <p>Thank you for using our service!</p>
+      {% if user.is_authenticated %}
+      <a class="" href="{% url 'base-homepage' %}">Go to Homepage</a>
+      {% else %}
+      <div class="download-auth">
+        <a class="download-sign" href="{% url 'register' %}">Sign Up</a> |
+        <a class="download-log" href="{% url 'login' %}">Log In</a>
+      </div>
+      <a class="download-homepage" href="{% url 'base-homepage' %}"
+        >Go to Homepage</a
+      >
+      {% endif %}
+    </div>
+  </div>
 </div>
 
 <script>
@@ -191,6 +280,13 @@
       document.getElementById("convert-btn").disabled = false;
     }
   };
+
+  function hidePopup(e) {
+    let popup = document.querySelector(".thank-you-message");
+    if (popup) {
+      popup.classList.add("hidden");
+    }
+  }
 </script>
 
 {% endblock %}

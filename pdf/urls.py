@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf.urls.static import static
-from .views import RegisterView, LoginView,LogoutView,VerifyEmailOTPView,ConvertPdfView, DownloadView, DownloadPageView
+from .views import RegisterView, LoginView,LogoutView,VerifyEmailOTPView,ConvertPdfView, DownloadView
 from django.conf import settings
 
 urlpatterns = [
@@ -11,7 +11,6 @@ urlpatterns = [
    
    path('', ConvertPdfView.as_view() ,name='base-homepage'),
    path('download/<str:file_path>/', DownloadView.as_view(), name='download'),
-   path('download_page/<str:file_path>/', DownloadPageView.as_view(), name='download_page'),
 ]
 
 
