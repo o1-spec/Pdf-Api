@@ -161,11 +161,8 @@ class ConvertPdfView(TemplateView):
         messages.error(request, "Conversion failed. Please try again.")
         return redirect("base-homepage")
 
-class DownloadView(View):
-    # template_name = "download.html"
-     
+class DownloadFileView(View):
     def get(self, request, file_path):
-        # file_name = request.GET.get("file_path")
         file_path = os.path.join(settings.MEDIA_ROOT, "conversions", file_path)
 
         if not os.path.exists(file_path):
@@ -173,3 +170,15 @@ class DownloadView(View):
 
         return FileResponse(open(file_path, "rb"), as_attachment=True)
     
+class DownloadPageView(TemplateView):
+    template_name = 'download.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Get the file name from the URL keyword argument
+        file_path = self.kwargs.get('file_path')
+        # Build a full URL for the download file view
+        context['file_url'] = self.request.build_absolute_uri(
+            reverse_lazy('download_file', kwargs={'file_path': file_path})
+        )
+        return context

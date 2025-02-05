@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf.urls.static import static
-from .views import RegisterView, LoginView,LogoutView,VerifyEmailOTPView,ConvertPdfView, DownloadView
+from .views import RegisterView, LoginView,LogoutView,VerifyEmailOTPView,ConvertPdfView, DownloadPageView, DownloadFileView
 from django.conf import settings
 
 urlpatterns = [
@@ -10,7 +10,9 @@ urlpatterns = [
    path('verify_otp/<int:user_id>/', VerifyEmailOTPView.as_view(), name='verify_otp'),
    
    path('', ConvertPdfView.as_view() ,name='base-homepage'),
-   path('download/<str:file_path>/', DownloadView.as_view(), name='download'),
+   path('download/<str:file_path>/', DownloadPageView.as_view(), name='download'),
+   
+   path('download_file/<str:file_path>/', DownloadFileView.as_view(), name='download_file'),
 ]
 
 
