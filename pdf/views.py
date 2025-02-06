@@ -182,3 +182,28 @@ class DownloadPageView(TemplateView):
             reverse_lazy('download_file', kwargs={'file_path': file_path})
         )
         return context
+    
+
+class PDFSummarizingView(TemplateView):
+    template_name = "pdf_summarizing.html"
+
+class ConvertWordView(TemplateView):
+    template_name = "convert_word.html"
+
+class ConvertPowerPointView(TemplateView):
+    template_name = "convert_powerpoint.html"
+
+class PDFTTSView(TemplateView):
+    template_name = "pdf_tts.html"
+
+class MergePDFView(TemplateView):
+    template_name = "merge_pdf.html"
+
+class SplitPDFView(TemplateView):
+    template_name = "split_pdf.html"
+
+class CompressPDFView(TemplateView):
+    template_name = "compress_pdf.html"
+
+class ConvertExcelView(TemplateView):
+    template_name = "convert_excel.html"

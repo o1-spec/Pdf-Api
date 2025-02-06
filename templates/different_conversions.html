@@ -1,0 +1,135 @@
+<style>
+  .different-conversions {
+    padding: 6rem 7rem;
+  }
+
+  .different-header {
+    text-decoration: underline;
+    font-size: 2.5rem;
+    text-align: center;
+    padding-bottom: 3rem;
+  }
+
+  .conversion-boxes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    row-gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .conversion-box {
+    text-decoration: none;
+    color: initial;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    padding: 6rem 2.5rem;
+    width: 20rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .conversion-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .conversion-box p {
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  .conversion-box i {
+    padding-bottom: 1.2rem;
+    font-size: 2.2rem;
+  }
+
+  .fa-file-alt {
+    color: brown;
+  }
+
+  .fa-file-word {
+    color: rgb(45, 79, 153);
+  }
+
+  .fa-file-pdf {
+    color: salmon;
+  }
+
+  .fa-microchip {
+    color: crimson;
+  }
+
+  .fa-cut {
+    color: red;
+  }
+
+  .fa-file-archive {
+    color: orange;
+  }
+
+  .fa-file-excel {
+    color: green;
+  }
+</style>
+
+<div class="different-conversions">
+  <div class="different-header">
+    <h3>Different Features</h3>
+  </div>
+  <div class="conversion-boxes">
+    <a href="{% url 'pdf_summarizing' %}" class="conversion-box">
+      <i class="fas fa-file-alt"></i>
+      <p>PDF SUMMARIZING</p>
+    </a>
+
+    <a href="{% url 'convert_word' %}" class="conversion-box">
+      <i class="fas fa-file-word"></i>
+      <p>PDF TO MS WORD</p>
+    </a>
+
+    <a href="{% url 'convert_powerpoint' %}" class="conversion-box">
+      <i class="fas fa-file-pdf"></i>
+      <p>PDF TO POWERPOINT</p>
+    </a>
+
+    <a href="{% url 'pdf_tts' %}" class="conversion-box">
+      <i class="fas fa-microchip"></i>
+      <p>PDF Text-to-Speech (TTS) AI Assistant</p>
+    </a>
+
+    <a href="{% url 'merge_pdf' %}" class="conversion-box">
+      <i class="fas fa-compress"></i>
+      <p>Merge PDF</p>
+    </a>
+
+    <a href="{% url 'split_pdf' %}" class="conversion-box">
+      <i class="fas fa-cut"></i>
+      <p>Split PDF</p>
+    </a>
+
+    <a href="{% url 'compress_pdf' %}" class="conversion-box">
+      <i class="fas fa-file-archive"></i>
+      <p>Compress PDF</p>
+    </a>
+    <a href="{% url 'convert_excel' %}" class="conversion-box">
+      <i class="fas fa-file-excel"></i>
+      <p>Excel to PDF</p>
+    </a>
+  </div>
+</div>
+<div
+  class="footer"
+  style="
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 1.4rem 0rem;
+  "
+>
+  Copyright &copy; Onadokun Oluwafemi
+</div>
