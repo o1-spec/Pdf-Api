@@ -18,8 +18,11 @@ reportlab = "*"
 poppler-utils = "*"
 pdf2docx = "*"
 python-docx = "*"
-pandas = "*"
 openpyxl = "*"
+pywin32 = "*"
+pdfplumber = "*"
+pandas = "*"
+fpdf = "*"
 
 [dev-packages]
 

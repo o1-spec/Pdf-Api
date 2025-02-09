@@ -1,0 +1,19 @@
+<div class="container">
+  <h2>Merge PDFs</h2>
+  <form id="mergeForm" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input
+      type="file"
+      id="mergeFiles"
+      name="files"
+      multiple
+      accept="application/pdf"
+      required
+    />
+    <br />
+    <button type="submit">Merge PDF</button>
+    <div id="mergeLoader" class="loader" style="display: none">
+      Processing...
+    </div>
+  </form>
+</div>

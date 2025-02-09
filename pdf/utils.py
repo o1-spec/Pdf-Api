@@ -6,9 +6,11 @@ from pdf2image import convert_from_path
 import zipfile
 import subprocess
 from pdf2docx import Converter
-from docx import Document
 import pandas as pd
 import fitz
+import PyPDF2
+import pdfplumber
+from fpdf import FPDF
 
 def generate_otp():
     totp = pyotp.TOTP(pyotp.random_base32(), interval=300)
@@ -76,57 +78,48 @@ def convert_pdf_to_word(pdf_file_path, output_folder):
         print("Error converting PDF to Word:", e)
         return None
 
-def convert_word_to_excel(word_file_path, output_folder):
+def convert_excel_to_pdf(excel_file_path, output_folder):
     try:
-        doc = Document(word_file_path)
-        data = []
-
-        # Read paragraphs from Word
-        for para in doc.paragraphs:
-            if para.text.strip():
-                data.append([para.text.strip()])
-
-        # Convert to DataFrame
-        df = pd.DataFrame(data, columns=["Word Content"])
-
-        # Save to Excel
-        output_excel_path = os.path.join(output_folder, "converted_word.xlsx")
-        df.to_excel(output_excel_path, index=False)
-        return output_excel_path
-
-    except Exception as e:
-        print("Error converting Word to Excel:", e)
-        return None
-
-def convert_excel_to_word(excel_file_path, output_folder):
-    try:
-        # Read Excel file
         df = pd.read_excel(excel_file_path)
+        output_pdf_path = os.path.join(output_folder, os.path.splitext(os.path.basename(excel_file_path))[0] + ".pdf")
 
-        # Create Word document
-        doc = Document()
-        doc.add_heading("Excel Data to Word", level=1)
+        pdf = FPDF()
+        pdf.set_auto_page_break(auto=True, margin=15)
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
 
-        # Add a table to Word
-        table = doc.add_table(rows=df.shape[0] + 1, cols=df.shape[1])
+        for index, row in df.iterrows():
+            pdf.cell(200, 10, txt=str(row.values), ln=True, align='L')
 
-        # Add headers
-        for j, column_name in enumerate(df.columns):
-            table.cell(0, j).text = column_name
+        pdf.output(output_pdf_path)
+        return output_pdf_path
+    except Exception as e:
+        print("Error converting Excel to PDF:", e)
+        return None
+    
+    
+def convert_pdf_to_excel(pdf_file_path, output_folder):
+    try:
+        tables = []
+        with pdfplumber.open(pdf_file_path) as pdf:
+            for page in pdf.pages:
+                extracted_table = page.extract_table()
+                if extracted_table:
+                    tables.extend(extracted_table)
 
-        # Add rows
-        for i, row in df.iterrows():
-            for j, value in enumerate(row):
-                table.cell(i + 1, j).text = str(value)
+        if tables:
+            df = pd.DataFrame(tables)
+            output_excel_path = os.path.join(output_folder, os.path.splitext(os.path.basename(pdf_file_path))[0] + ".xlsx")
+            df.to_excel(output_excel_path, index=False)
+            return output_excel_path
 
-        # Save Word file
-        output_word_path = os.path.join(output_folder, "converted_excel.docx")
-        doc.save(output_word_path)
-        return output_word_path
+        print("No tables found in the PDF.")
+        return None
 
     except Exception as e:
-        print("Error converting Excel to Word:", e)
+        print("Error converting PDF to Excel:", e)
         return None
+
     
 def compress_pdf(input_pdf_path, output_pdf_path, quality=60):
     doc = fitz.open(input_pdf_path)
@@ -158,8 +151,8 @@ def merge_pdfs(pdf_list, output_pdf_path):
     
     return output_pdf_path
 
-def split_pdf(input_pdf_path, output_folder):
-    """Split a PDF into individual pages and save each as a separate file."""
+def split_pdf(input_pdf_path, output_folder, page_ranges):
+    """Split a PDF into specified pages and save each as a separate file."""
     os.makedirs(output_folder, exist_ok=True)
 
     with open(input_pdf_path, "rb") as f:
@@ -167,11 +160,25 @@ def split_pdf(input_pdf_path, output_folder):
         num_pages = len(reader.pages)
 
         split_files = []
-        for i in range(num_pages):
-            writer = PyPDF2.PdfWriter()
-            writer.add_page(reader.pages[i])
+        pages_to_extract = set()
 
-            output_pdf_path = os.path.join(output_folder, f"page_{i + 1}.pdf")
+        # Parse the page range input (e.g., "1-3, 5, 7-10")
+        for part in page_ranges.split(","):
+            part = part.strip()
+            if "-" in part:
+                start, end = map(int, part.split("-"))
+                pages_to_extract.update(range(start, end + 1))
+            else:
+                pages_to_extract.add(int(part))
+
+        for i in sorted(pages_to_extract):
+            if i > num_pages or i < 1:
+                continue  # Skip invalid page numbers
+
+            writer = PyPDF2.PdfWriter()
+            writer.add_page(reader.pages[i - 1])  # Adjust for zero-based index
+
+            output_pdf_path = os.path.join(output_folder, f"page_{i}.pdf")
             with open(output_pdf_path, "wb") as output_file:
                 writer.write(output_file)
 

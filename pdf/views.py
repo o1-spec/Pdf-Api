@@ -6,7 +6,7 @@ from .forms import UserRegistrationForm, EmailOTPVerificationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .utils import convert_images_to_pdf,convert_pdf_to_images, convert_pdf_to_word,convert_word_to_pdf, convert_excel_to_word,convert_word_to_excel,compress_pdf, split_pdf,merge_pdfs
+from .utils import convert_images_to_pdf,convert_pdf_to_images, convert_pdf_to_word,convert_word_to_pdf, convert_excel_to_pdf,convert_pdf_to_excel,compress_pdf, split_pdf,merge_pdfs
 from django.contrib.auth. models import User
 from django.contrib.auth import login
 from .utils import generate_otp, verify_otp
@@ -16,9 +16,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import  FileConversion
 import os
+import zipfile
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
-import urllib
 
 #Write your views
 class RegisterView(FormView):
@@ -163,12 +163,25 @@ class ConvertPdfView(TemplateView):
 
 class DownloadFileView(View):
     def get(self, request, file_path):
-        file_path = os.path.join(settings.MEDIA_ROOT, "conversions", file_path)
+        # Define possible directories
+        possible_dirs = [
+            os.path.join(settings.MEDIA_ROOT, "merged_pdfs"),
+            os.path.join(settings.MEDIA_ROOT, "conversions"),
+            os.path.join(settings.MEDIA_ROOT, "split_pdfs")
+        ]
 
-        if not os.path.exists(file_path):
+        # Check where the file exists
+        file_full_path = None
+        for directory in possible_dirs:
+            temp_path = os.path.join(directory, file_path)
+            if os.path.exists(temp_path):
+                file_full_path = temp_path
+                break
+
+        if not file_full_path:
             raise Http404("File not found.")
 
-        return FileResponse(open(file_path, "rb"), as_attachment=True)
+        return FileResponse(open(file_full_path, "rb"), as_attachment=True, filename=os.path.basename(file_full_path))
     
 class DownloadPageView(TemplateView):
     template_name = 'download.html'
@@ -225,7 +238,7 @@ class ConvertExcelView(TemplateView):
 
         if not uploaded_file:
             messages.error(request, "Please upload a file.")
-            return redirect("convert_excel_word")
+            return redirect("convert_excel")
 
         output_folder = os.path.join(settings.MEDIA_ROOT, "conversions")
         os.makedirs(output_folder, exist_ok=True)
@@ -235,18 +248,18 @@ class ConvertExcelView(TemplateView):
             for chunk in uploaded_file.chunks():
                 f.write(chunk)
 
-        if conversion_type == "excel_to_word":
-            word_path = convert_excel_to_word(file_path, output_folder)
-            if word_path:
-                return redirect("download", file_path=os.path.basename(word_path))
-
-        elif conversion_type == "word_to_excel":
-            excel_path = convert_word_to_excel(file_path, output_folder)
+        if conversion_type == "pdf_to_excel":
+            excel_path = convert_pdf_to_excel(file_path, output_folder)
             if excel_path:
                 return redirect("download", file_path=os.path.basename(excel_path))
 
+        elif conversion_type == "excel_to_pdf":
+            pdf_path = convert_excel_to_pdf(file_path, output_folder)
+            if pdf_path:
+                return redirect("download", file_path=os.path.basename(pdf_path))
+
         messages.error(request, "Conversion failed. Please try again.")
-        return redirect("convert_excel_word")
+        return redirect("convert_excel")
 
 class CompressPDFView(TemplateView):
     template_name = "compress_pdf.html"
@@ -306,29 +319,37 @@ class MergePDFView(TemplateView):
         
         messages.error(request, "Merging failed. Please try again.")
         return redirect("merge_pdf")
-    
+
 class SplitPDFView(TemplateView):
     template_name = "split_pdf.html"
 
     def post(self, request):
-        uploaded_file = request.FILES.get("file")
+        uploaded_file = request.FILES.get("pdf_file")
+        page_ranges = request.POST.get("page_range")
+
         if not uploaded_file:
             messages.error(request, "Please upload a PDF file.")
             return redirect("split_pdf")
-        
+
         output_folder = os.path.join(settings.MEDIA_ROOT, "split_pdfs")
         os.makedirs(output_folder, exist_ok=True)
-        
+
         input_pdf_path = os.path.join(output_folder, uploaded_file.name)
         with open(input_pdf_path, "wb") as f:
             for chunk in uploaded_file.chunks():
                 f.write(chunk)
-        
-        split_files = split_pdf(input_pdf_path, output_folder)
-        
+
+        split_files = split_pdf(input_pdf_path, output_folder, page_ranges)
+
         if split_files:
-            return redirect("download", file_path=os.path.basename(split_files[0]))
-        
+            # If multiple files, create a ZIP
+            zip_path = os.path.join(output_folder, "split_pages.zip")
+            with zipfile.ZipFile(zip_path, "w") as zipf:
+                for file in split_files:
+                    zipf.write(file, os.path.basename(file))
+
+            return redirect("download", file_path=os.path.basename(zip_path))
+
         messages.error(request, "Splitting failed. Please try again.")
         return redirect("split_pdf")
 
@@ -341,9 +362,3 @@ class ConvertPowerPointView(TemplateView):
 
 class PDFTTSView(TemplateView):
     template_name = "pdf_tts.html"
-
-class MergePDFView(TemplateView):
-    template_name = "merge_pdf.html"
-
-class SplitPDFView(TemplateView):
-    template_name = "split_pdf.html"
