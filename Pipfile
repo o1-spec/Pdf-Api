@@ -16,6 +16,10 @@ pillow = "*"
 pdf2image = "*"
 reportlab = "*"
 poppler-utils = "*"
+pdf2docx = "*"
+python-docx = "*"
+pandas = "*"
+openpyxl = "*"
 
 [dev-packages]
 
